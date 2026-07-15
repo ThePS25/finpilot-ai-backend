@@ -21,7 +21,16 @@ const authController = {
     }
 
     setAuthCookies(res, result.accessToken, result.refreshToken);
-    sendSuccess(res, { user: result.user }, 'Login successful');
+    // Return tokens in body too — required for Vercel↔Render cross-origin (cookies often blocked)
+    sendSuccess(
+      res,
+      {
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      },
+      'Login successful'
+    );
   }),
 
   refresh: asyncHandler(async (req, res) => {
@@ -31,11 +40,15 @@ const authController = {
       await authService.refreshTokens(refreshToken, req.get('user-agent'), req.ip);
 
     setAuthCookies(res, accessToken, newRefreshToken);
-    sendSuccess(res, { user }, 'Token refreshed successfully');
+    sendSuccess(
+      res,
+      { user, accessToken, refreshToken: newRefreshToken },
+      'Token refreshed successfully'
+    );
   }),
 
   logout: asyncHandler(async (req, res) => {
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies?.refreshToken || req.body.refreshToken;
     await authService.logout(refreshToken, req.user?.id);
     clearAuthCookies(res);
     sendSuccess(res, null, 'Logout successful');

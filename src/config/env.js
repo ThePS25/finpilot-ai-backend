@@ -53,11 +53,16 @@ module.exports = {
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   },
   cookie: {
-    // Leave unset for cross-site deployments (Vercel + Render). Only set for same-site apex domains.
-    domain: process.env.COOKIE_DOMAIN || undefined,
-    secure: cookieSecure,
+    // Never set Domain=localhost in production — browsers reject it on real hosts.
+    // Leave unset for Vercel + Render cross-site cookies.
+    domain: (() => {
+      const d = process.env.COOKIE_DOMAIN;
+      if (!d || d === 'localhost' || d === '127.0.0.1') return undefined;
+      return d;
+    })(),
+    secure: isProduction ? true : cookieSecure,
     // Cross-origin SPA needs SameSite=None + Secure
-    sameSite: cookieSecure ? 'none' : 'lax',
+    sameSite: isProduction || cookieSecure ? 'none' : 'lax',
   },
   clientUrl: (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, ''),
   clientOrigins: parseOrigins(),
