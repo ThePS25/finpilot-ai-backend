@@ -1,0 +1,40 @@
+const express = require('express');
+const authRoutes = require('./auth.routes');
+const profileRoutes = require('./profile.routes');
+const incomeRoutes = require('./income.routes');
+const expenseRoutes = require('./expense.routes');
+const investmentRoutes = require('./investment.routes');
+const goalRoutes = require('./goal.routes');
+const debtRoutes = require('./debt.routes');
+const budgetRoutes = require('./budget.routes');
+const recurringExpenseRoutes = require('./recurringExpense.routes');
+const notificationRoutes = require('./notification.routes');
+const dashboardRoutes = require('./dashboard.routes');
+const payslipRoutes = require('./payslip.routes');
+const financialHealthRoutes = require('./financialHealth.routes');
+const coachRoutes = require('./coach.routes');
+const scenarioRoutes = require('./scenario.routes');
+const insightRoutes = require('./insight.routes');
+const exportRoutes = require('./export.routes');
+
+const router = express.Router();
+
+router.use('/auth', authRoutes);
+router.use('/profiles', profileRoutes);
+router.use('/incomes', incomeRoutes);
+router.use('/expenses', expenseRoutes);
+router.use('/investments', investmentRoutes);
+router.use('/goals', goalRoutes);
+router.use('/debts', debtRoutes);
+router.use('/budgets', budgetRoutes);
+router.use('/recurring-expenses', recurringExpenseRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/payslips', payslipRoutes);
+router.use('/financial-health', financialHealthRoutes);
+router.use('/coach', coachRoutes);
+router.use('/scenarios', scenarioRoutes);
+router.use('/insights', insightRoutes);
+router.use('/export', exportRoutes);
+
+module.exports = router;
